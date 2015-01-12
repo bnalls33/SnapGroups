@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/group_row_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"/>
+
+    <CheckBox
+        android:id="@+id/group_row_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleX="2"
+        android:scaleY="2"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"/>
+
+
+
+    <Button
+        android:id="@+id/group_row_rename_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/group_row_rename"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/group_row_name"/>
+
+    <Button
+        android:id="@+id/group_row_delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/group_row_delete"
+        android:layout_below="@id/group_row_name"
+        android:layout_toRightOf="@id/group_row_rename_button"/>
+
+    <Button
+        android:id="@+id/group_row_edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/group_row_edit"
+        android:layout_below="@id/group_row_name"
+        android:layout_toRightOf="@id/group_row_delete_button"/>
+
+</RelativeLayout>

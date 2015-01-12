@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SnapGroups</string>
+    <string name="overflow_action_new">New List</string>
+    <string name="no_groups_found">No saved SnapGroups found.</string>
+    <string name="group_list_send_button">Send to Checked Groups!</string>
+
+    <!-- Group Rows -->
+    <string name="group_row_delete">Delete</string>
+    <string name="group_row_edit">Edit</string>
+    <string name="group_row_rename">Rename</string>
+
+
+    <!-- Group Edit Dialogs -->
+    <string name="dialog_add_group_title">Add New SnapGroup</string>
+    <string name="dialog_add_group_message">Name your new group</string>
+    <string name="dialog_add_group_edittext_hint">Something creative...</string>
+    <string name="dialog_delete_group_title">Delete Confirmation</string>
+    <string name="dialog_delete_group_message">Delete "%s" from SnapGroups?</string>
+    <string name="dialog_rename_group_title">Rename SnapGroup</string>
+    <string name="dialog_rename_group_message">New name for "%s":</string>
+    <string name="dialog_edit_group_title">Friends for "%s"</string>
+    <string name="dialog_button_create">Create</string>
+    <string name="dialog_button_rename">Rename</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="dialog_button_yes">Yes</string>
+    <string name="dialog_button_save">Save</string>
+
+    <!-- Errors -->
+    <string name="failed_to_delete_group">Failed to delete "%s"</string>
+    <string name="group_already_exists">A group with that name already exists.</string>
+    <string name="failed_to_rename_group">Failed to rename "%s"</string>
+    <string name="no_length_group_name">Group name must be 1 character long.</string>
+
+</resources>
