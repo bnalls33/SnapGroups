@@ -112,8 +112,8 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
                     }
 
                     try {
-                        //Otherbutton (Var b) is from R.java send_to_action_bar_search_button = 2131427800
-                        ///   reverse looked that # up in method "h" where it findsViewById(213142700) via alias method.
+                        //Otherbutton (Var b) is from R.java send_to_action_bar_search_button = 2131362379
+                        ///   reverse looked that # up in method SendToFragment "h" where it findsViewById(2131362379) via alias method.
                         View otherButton = (View) getObjectField(param.thisObject, "b");
 
                         //Creates a container for SnapAll and SnapGroup XPosed mod buttons (if it doesn't exist already)
@@ -121,7 +121,7 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
                         LinearLayout sharedButtonContainer = (LinearLayout) getAdditionalInstanceField(param.thisObject, groupButtonContainerName);
                         if(sharedButtonContainer == null || !(sharedButtonContainer instanceof LinearLayout)) {
                             RelativeLayout.LayoutParams myParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            myParams.setMargins(0, 0, 30, 0);
+                            myParams.setMargins(0, 0, 0, 0);
                             myParams.addRule(RelativeLayout.LEFT_OF, otherButton.getId());
                             myParams.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
                             sharedButtonContainer = new LinearLayout(sContextActivity);
@@ -138,9 +138,9 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
                         snapGroupButton.setPadding(10, 10, 10, 10);
                         snapGroupButton.setAdjustViewBounds(true);
                         snapGroupButton.setOnClickListener(getSnapGroupButtonClickListener());
-                        LinearLayout.LayoutParams snapGroupButtonParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                        snapGroupButtonParams.setMargins(30,0,30,0);
-                        sharedButtonContainer.addView(snapGroupButton);
+                        LinearLayout.LayoutParams snapGroupButtonParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        snapGroupButtonParams.setMargins(0,0,30,0);
+                        sharedButtonContainer.addView(snapGroupButton, snapGroupButtonParams);
 
                     } catch (Throwable t) {
                         XposedBridge.log("SnapGroups failed to insert SnapGroups Button." + t);
@@ -152,7 +152,7 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
             /**
              * These hide the SnapGroupButton while the search box is displayed
              */
-            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "m", new XC_MethodHook() {
+            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "o", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     View v = (View) getAdditionalInstanceField(param.thisObject, groupButtonContainerName);
@@ -160,7 +160,7 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
                 }
             });
 
-            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "n", new XC_MethodHook() {
+            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "p", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     View v = (View) getAdditionalInstanceField(param.thisObject, groupButtonContainerName);
@@ -190,11 +190,11 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
                         changedMade = true;
                     }
                 }
-                // This method "d" in SendToFragment that makes the bottom Blue SentToBar contain
+                // This method "b" in SendToFragment that makes the bottom Blue SentToBar contain
                 // a comma separated list of friend display names.
                 // It has iterators (localInterator1) and such.
                 if(changedMade) {
-                    callMethod(sContextSendToFragment, "d");
+                    callMethod(sContextSendToFragment, "b");
                 }
             } catch(Exception e) {
                 XposedBridge.log("SnapGroups : Failed to add SnapGroups to Friend List. Exception: "+e.getStackTrace());

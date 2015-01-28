@@ -3,7 +3,7 @@ users create Friend Groups. This lets users send SnapChats to lists
 of people without having to scroll through their hundreds of friends.
 
 Requirements:
-Snapchat 8.1.2
+Snapchat 9.0.1.0
 Rooted Android Device
 Xposed Framework Installed
 
