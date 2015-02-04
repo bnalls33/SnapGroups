@@ -1,51 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    android:gravity="center_horizontal">
 
-    <TextView
-        android:id="@+id/group_row_name"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/group_row_show_edit_bar_button"
+            android:contentDescription="@string/group_row_show_edit_bar_accessibility"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/edit_icon"
+            android:background="@null"
+            android:padding="0dp"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/group_row_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:maxLines="1"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/group_row_show_edit_bar_button"/>
+
+        <CheckBox
+            android:id="@+id/group_row_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/group_row_action_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceListItem"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"/>
+        android:orientation="horizontal"
+        android:visibility="gone">
 
-    <CheckBox
-        android:id="@+id/group_row_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleX="2"
-        android:scaleY="2"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"/>
+        <Button
+            android:id="@+id/group_row_rename_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/group_row_rename"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
+
+        <Button
+            android:id="@+id/group_row_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/group_row_delete"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
+
+        <Button
+            android:id="@+id/group_row_edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/group_row_edit"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
+    </LinearLayout>
 
 
-
-    <Button
-        android:id="@+id/group_row_rename_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/group_row_rename"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/group_row_name"/>
-
-    <Button
-        android:id="@+id/group_row_delete_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/group_row_delete"
-        android:layout_below="@id/group_row_name"
-        android:layout_toRightOf="@id/group_row_rename_button"/>
-
-    <Button
-        android:id="@+id/group_row_edit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/group_row_edit"
-        android:layout_below="@id/group_row_name"
-        android:layout_toRightOf="@id/group_row_delete_button"/>
-
-</RelativeLayout>
+</LinearLayout>

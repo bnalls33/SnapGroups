@@ -5,6 +5,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.Menu;
@@ -132,10 +133,24 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
         }).show();
     }
 
+    private static View.OnClickListener showActionBarClickListener(final View groupRow) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toggle action bar visibility
+                final View actionBar = groupRow.findViewById(R.id.group_row_action_bar);
+                actionBar.setVisibility(actionBar.getVisibility() == View.VISIBLE ?
+                        View.GONE : View.VISIBLE);
+            }
+        };
+    }
+
     private void showEditGroupMembersDialog(final String groupName) {
         //Create listview and adapter
         final List<Map<String, String>> dataList = mFriendManager.generateFriendListviewData();
-        final FriendListAdapter adapter = new FriendListAdapter(this, dataList, R.layout.friend_row,
+        final FriendListAdapter adapter = new FriendListAdapter(this,
+                dataList,
+                R.layout.friend_row,
                 new String[] {FriendManager.USER_TO_DISPLAY_MAP_FIELD_DISPLAYNAME, FriendManager.USER_TO_DISPLAY_MAP_FIELD_USERNAME},
                 new int[] {R.id.friend_row_displayname, R.id.friend_row_username});
         final ListView userListView = new ListView(this);
@@ -256,7 +271,9 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            View row = super.getView(position, convertView, parent);
+            final View row = super.getView(position, convertView, parent);
+
+            //Set button listeners
             row.findViewById(R.id.group_row_delete_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -275,10 +292,13 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
                     showEditGroupMembersDialog(mCurrentGroupsForList.get(position));
                 }
             });
+            row.findViewById(R.id.group_row_show_edit_bar_button).setOnClickListener(showActionBarClickListener(row));
 
             final String groupName = mCurrentGroupsForList.get(position);
+            final Drawable snapchatCBDrawable = ResourceServer.getSnapchatCheckboxDrawable(GroupListActivity.this);
             Boolean checkStatus = mGroupCheckedRecord.get(groupName);
             checkStatus = checkStatus == null ? false : checkStatus; //Maps can return null for Boolean
+
             CheckBox cb = (CheckBox) row.findViewById(R.id.group_row_checkbox);
             cb.setOnCheckedChangeListener(null); //Due to recycling glitches
             cb.setChecked(checkStatus);
@@ -288,11 +308,17 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
                     mGroupCheckedRecord.put(groupName, b);
                 }
             });
+
+            //Make the checkbox match shapchat's appearance
+            if(snapchatCBDrawable != null) {
+                cb.setButtonDrawable(snapchatCBDrawable);
+            }
+
             return row;
         }
     }
 
-    private class FriendListAdapter extends SimpleAdapter {
+    public class FriendListAdapter extends SimpleAdapter {
         private boolean[] actuallyCheckedItems;
 
         public FriendListAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
@@ -302,16 +328,22 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            View fromSuper = super.getView(position, convertView, parent);
-            CheckBox cb = (CheckBox) fromSuper.findViewById(R.id.friend_row_checkbox);
+            final View fromSuper = super.getView(position, convertView, parent);
+            final Drawable snapchatCBDrawable = ResourceServer.getSnapchatCheckboxDrawable(GroupListActivity.this);
+            final CheckBox cb = (CheckBox) fromSuper.findViewById(R.id.friend_row_checkbox);
             cb.setOnCheckedChangeListener(null);
             cb.setChecked(actuallyCheckedItems[position]);
+            cb.setScaleX(1);
+            cb.setScaleY(1);
             cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     setItemActuallyChecked(position, b);
                 }
             });
+            if(snapchatCBDrawable != null) {
+                cb.setButtonDrawable(snapchatCBDrawable);
+            }
             return fromSuper;
         }
 
@@ -325,7 +357,6 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
     }
 }
 
-//TODO: ColoriseApp! This & Friend selector
 //TODO: Ensure this activity gets killed & doesn't live after it closes (to force data refresh)
 //TODO: Use LogCat "verbose" with search "Snap" on app: No Filters to find hidden errors / issues.
 //TODO: Bug: Open editor, hit "home", then open SnapGroups from recents. Notice: Crash. COuld be intent flags, onHooking "h", or could be snapchat bug

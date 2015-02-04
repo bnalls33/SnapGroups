@@ -1,8 +1,21 @@
 <resources>
+    <!-- the theme applied to the application or activity -->
+    <style name="CustomTheme"
+        parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/SnapGroupsActionBar</item>
+    </style>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <!-- ActionBar styles -->
+    <style name="SnapGroupsActionBar"
+        parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:titleTextStyle">@style/ActionBarTitleText</item>
+        <item name="android:background">@drawable/actionbar_bg</item>
+    </style>
+
+    <!-- ActionBar title text -->
+    <style name="ActionBarTitleText"
+        parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/actionbar_text_color</item>
     </style>
 
 </resources>

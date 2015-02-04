@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">SnapGroups</string>
-    <string name="overflow_action_new">New List</string>
+
+    <!-- Group Editor Labels and Buttons-->
+    <string name="overflow_action_new">New Group</string>
     <string name="no_groups_found">No saved SnapGroups found.</string>
     <string name="group_list_send_button">Send to Checked Groups!</string>
 
@@ -10,6 +11,7 @@
     <string name="group_row_delete">Delete</string>
     <string name="group_row_edit">Edit</string>
     <string name="group_row_rename">Rename</string>
+    <string name="group_row_show_edit_bar_accessibility">Show Group Options</string>
 
 
     <!-- Group Edit Dialogs -->
