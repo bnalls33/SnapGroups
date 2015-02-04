@@ -131,8 +131,9 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
                             setAdditionalInstanceField(param.thisObject, groupButtonContainerName, sharedButtonContainer);
                         }
 
+                        //Create the snapgroup button & put it into the container
                         ImageButton snapGroupButton = new ImageButton(sContextActivity);
-                        snapGroupButton.setImageDrawable(getSnapGroupResources(sContextActivity).getDrawable(R.drawable.group_icon));
+                        snapGroupButton.setImageDrawable(ResourceServer.getSnapGroupResources(sContextActivity).getDrawable(R.drawable.group_icon));
                         snapGroupButton.setBackgroundColor(Color.argb(0, 0, 0, 0));
                         snapGroupButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                         snapGroupButton.setPadding(10, 10, 10, 10);
@@ -184,12 +185,21 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
             try {
                 boolean changedMade = false;
                 for(Object friend : friends) {
+                    //Enforce 200 Sender Limit (in case already checked + snapgroups friends > 200)
+                    if(destinationFriendSet.size() >= 200) {
+                        Toast.makeText(sContextActivity,
+                                ResourceServer.getSnapGroupResources(sContextActivity).getString(R.string.too_many_friends_in_checked_groups),
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    }
+
                     //This is from com.snapchat.android.model.Friend, clearly the username
                     if(usernamesToCheck.contains((String)getObjectField(friend, "mUsername"))) {
                         destinationFriendSet.add(friend);
                         changedMade = true;
                     }
                 }
+
                 // This method "b" in SendToFragment that makes the bottom Blue SentToBar contain
                 // a comma separated list of friend display names.
                 // It has iterators (localInterator1) and such.
@@ -296,19 +306,4 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
         Toast.makeText(sContextActivity, "SnapGroups thinks you have no friends :( Tell us it needs an update.", Toast.LENGTH_LONG).show();
         return new ArrayList();
     }
-
-    public static Resources getSnapGroupResources(Context context) {
-        try {
-            final Resources res = context.getPackageManager().getResourcesForApplication(SnapGroupsHooks.class.getPackage().getName());
-            return res;
-        } catch (PackageManager.NameNotFoundException nmne) {
-            XposedBridge.log("SnapGroups exception:\n"+nmne.getStackTrace());
-            return null;
-        }
-    }
-
-
 }
-
-//todo: factor out all obfuscated code & put somewhere it's explainable
-

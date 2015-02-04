@@ -18,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,7 +82,6 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
         input.setHint(R.string.dialog_add_group_edittext_hint);
         new AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_add_group_title)
-                .setMessage(R.string.dialog_add_group_message)
                 .setView(input)
                 .setPositiveButton(R.string.dialog_button_create, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -207,11 +207,17 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
                 for(String group : adapter.getCheckedGroups()) {
                     userList.addAll(mGroupManager.getGroupsUsers(group));
                 }
-                //Send username list to other activity
-                Intent responseData = new Intent();
-                responseData.putStringArrayListExtra(BUNDLE_OUT_EXTRA_USERNAME_LIST, new ArrayList<>(userList));
-                GroupListActivity.this.setResult(SnapGroupsHooks.SNAPGROUP_RESPONSE_SUCCESS_CONSTANT, responseData);
-                finish();
+                //Don't let the user select 200+ recipients (SnapChat Server enforced)
+
+                if(userList.size() >= 200) {
+                    Toast.makeText(GroupListActivity.this, R.string.too_many_friends_in_checked_groups, Toast.LENGTH_LONG).show();
+                } else {
+                    //Send username list to other activity
+                    Intent responseData = new Intent();
+                    responseData.putStringArrayListExtra(BUNDLE_OUT_EXTRA_USERNAME_LIST, new ArrayList<>(userList));
+                    GroupListActivity.this.setResult(SnapGroupsHooks.SNAPGROUP_RESPONSE_SUCCESS_CONSTANT, responseData);
+                    finish();
+                }
             }
         });
     }
