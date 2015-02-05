@@ -55,7 +55,10 @@
             android:id="@+id/group_row_rename_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:text="@string/group_row_rename"
+            android:background="@drawable/button"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"/>
 
@@ -63,7 +66,10 @@
             android:id="@+id/group_row_delete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:text="@string/group_row_delete"
+            android:background="@drawable/button"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"/>
 
@@ -71,7 +77,10 @@
             android:id="@+id/group_row_edit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:text="@string/group_row_edit"
+            android:background="@drawable/button"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"/>
     </LinearLayout>

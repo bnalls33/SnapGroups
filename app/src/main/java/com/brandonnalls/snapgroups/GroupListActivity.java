@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -46,7 +48,7 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
         mFriendManager.readFriendsFromBundle(getIntent().getExtras());
         mListAdapter = new GroupListAdapter(this);
         setListAdapter(mListAdapter);
-        setContentView(R.layout.activity_group_list);
+        setContentView(R.layout.group_list_activity);
         setSendButtonClickListener();
     }
 
@@ -133,14 +135,30 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
         }).show();
     }
 
-    private static View.OnClickListener showActionBarClickListener(final View groupRow) {
+    private static View.OnClickListener pencilClickListener(final View groupRow) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toggle action bar visibility
+                //Rotate button
                 final View actionBar = groupRow.findViewById(R.id.group_row_action_bar);
-                actionBar.setVisibility(actionBar.getVisibility() == View.VISIBLE ?
-                        View.GONE : View.VISIBLE);
+                final View showButton = groupRow.findViewById(R.id.group_row_show_edit_bar_button);
+                int angleChange = actionBar.getVisibility() == View.VISIBLE ? 360 : -360;
+                final RotateAnimation animation = new RotateAnimation(0, angleChange, showButton.getMeasuredWidth() / 2, showButton.getMeasuredHeight() / 2);
+                animation.setDuration(400);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override public void onAnimationStart(Animation animation)  { /* NOP */  }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        //Toggle action bar visibility
+                        actionBar.setVisibility(actionBar.getVisibility() == View.VISIBLE ?
+                                View.GONE : View.VISIBLE);
+                    }
+
+                    @Override public void onAnimationRepeat(Animation animation) { /* NOP */  }
+                });
+                showButton.startAnimation(animation);
+
             }
         };
     }
@@ -292,7 +310,7 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
                     showEditGroupMembersDialog(mCurrentGroupsForList.get(position));
                 }
             });
-            row.findViewById(R.id.group_row_show_edit_bar_button).setOnClickListener(showActionBarClickListener(row));
+            row.findViewById(R.id.group_row_show_edit_bar_button).setOnClickListener(pencilClickListener(row));
 
             final String groupName = mCurrentGroupsForList.get(position);
             final Drawable snapchatCBDrawable = ResourceServer.getSnapchatCheckboxDrawable(GroupListActivity.this);

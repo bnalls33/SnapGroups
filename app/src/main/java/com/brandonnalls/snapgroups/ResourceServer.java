@@ -16,7 +16,7 @@ public class ResourceServer {
     public static Resources getSnapGroupResources(Context anyContext) {
         try {
             if(snapgroupResources == null || snapgroupResources.get() == null) {
-                snapgroupResources = new WeakReference<Resources>(anyContext.getPackageManager().getResourcesForApplication(SnapGroupsHooks.class.getPackage().getName()));
+                snapgroupResources = new WeakReference<Resources>(anyContext.getPackageManager().getResourcesForApplication(ResourceServer.class.getPackage().getName()));
             }
             return snapgroupResources.get();
         } catch (PackageManager.NameNotFoundException nmne) {

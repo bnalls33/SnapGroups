@@ -16,6 +16,7 @@
     <style name="ActionBarTitleText"
         parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@color/actionbar_text_color</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
 </resources>

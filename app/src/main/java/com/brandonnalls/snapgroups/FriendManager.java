@@ -67,7 +67,8 @@ public class FriendManager {
     public void readFriendsFromBundle(Bundle extras) {
         ArrayList<String> userNames;
         ArrayList<String> displayNames;
-        if(extras.containsKey(GroupListActivity.BUNDLE_IN_EXTRA_USERNAME_LIST) && extras.containsKey(GroupListActivity.BUNDLE_IN_EXTRA_USERDISPLAYNAME_LIST) &&
+        if(extras != null && extras.containsKey(GroupListActivity.BUNDLE_IN_EXTRA_USERNAME_LIST) &&
+                extras.containsKey(GroupListActivity.BUNDLE_IN_EXTRA_USERDISPLAYNAME_LIST) &&
                 !(userNames = extras.getStringArrayList(GroupListActivity.BUNDLE_IN_EXTRA_USERNAME_LIST)).isEmpty() &&
                 !(displayNames = extras.getStringArrayList(GroupListActivity.BUNDLE_IN_EXTRA_USERDISPLAYNAME_LIST)).isEmpty()) {
             if(userNames.size() == displayNames.size()) {
@@ -82,12 +83,11 @@ public class FriendManager {
                 mUserToDisplayNameMap = userToDisplayNameMap;
             } else {
                 Toast.makeText(mContext, "Friends not loaded correctly. SnapGroups needs an update...", Toast.LENGTH_LONG).show();
-                XposedBridge.log("SnapGroups: Username and display name intent lists are different sizes. Need 1:1");
                 Log.e("SnapGroups","Username and display name intent lists are different sizes. Need 1:1");
             }
         } else {
+            mUserToDisplayNameMap = new HashMap<>(0);
             Toast.makeText(mContext, "Friends not found. SnapGroups needs an update...", Toast.LENGTH_LONG).show();
-            XposedBridge.log("SnapGroups: Friends not found in the intent...");
             Log.e("SnapGroups","Friends not found in the intent...");
         }
     }
