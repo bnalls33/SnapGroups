@@ -90,11 +90,11 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
             });
 
             /** Adds the SnapGroups Button to the SendTo Action Bar
-             * Method "h" that I'm overriding does many findViewByIds on it's own buttons.
+             * Method "k" that I'm overriding does many findViewByIds on it's own buttons.
              * This will add a button, and link it to my GroupListActivity, sending the necessary
              * friend information.
              * */
-            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "h", new XC_MethodHook() {
+            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "k", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(final MethodHookParam param) throws Throwable {
                     if (sContextActivity == null) {
@@ -112,8 +112,8 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
                     }
 
                     try {
-                        //Otherbutton (Var b) is from R.java send_to_action_bar_search_button = 2131362379
-                        ///   reverse looked that # up in method SendToFragment "h" where it findsViewById(2131362379) via alias method.
+                        //Otherbutton (Var b) is from R.java send_to_action_bar_search_button = 2131362400
+                        ///   reverse looked that # up in method SendToFragment "k" where it findsViewById(2131362400) via alias method.
                         View otherButton = (View) getObjectField(param.thisObject, "b");
 
                         //Creates a container for SnapAll and SnapGroup XPosed mod buttons (if it doesn't exist already)
@@ -144,7 +144,7 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
                         sharedButtonContainer.addView(snapGroupButton, snapGroupButtonParams);
 
                     } catch (Throwable t) {
-                        XposedBridge.log("SnapGroups failed to insert SnapGroups Button." + t);
+                        XposedBridge.log("SnapGroups failed to insert SnapGroups Button." + t.getStackTrace());
                         return;
                     }
                 }
@@ -153,7 +153,7 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
             /**
              * These hide the SnapGroupButton while the search box is displayed
              */
-            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "o", new XC_MethodHook() {
+            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "q", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     View v = (View) getAdditionalInstanceField(param.thisObject, groupButtonContainerName);
@@ -161,7 +161,7 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
                 }
             });
 
-            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "p", new XC_MethodHook() {
+            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "r", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     View v = (View) getAdditionalInstanceField(param.thisObject, groupButtonContainerName);
@@ -178,7 +178,7 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
     public static void checkmarkSnapgroupUsers(HashSet<String> usernamesToCheck) {
         ArrayList friends = getFriendList();
 
-        //From SendtoFragment.. the two collections, one is a list, one set
+        //"l" is from SendtoFragment.. the two collections, one is a list, one set
         Object hopefullyDestinationFriendSet = (Set) getObjectField(sContextSendToFragment, "l");
         if(hopefullyDestinationFriendSet != null && hopefullyDestinationFriendSet instanceof LinkedHashSet) {
             LinkedHashSet destinationFriendSet = (LinkedHashSet) hopefullyDestinationFriendSet;
