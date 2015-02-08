@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,6 +84,7 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
     private void showAddGroupDialog() {
         final EditText input = new EditText(this);
         input.setHint(R.string.dialog_add_group_edittext_hint);
+        input.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_CORRECT | InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         new AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_add_group_title)
                 .setView(input)
@@ -102,6 +104,7 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
     private void showRenameGroupDialog(final String oldName) {
         final EditText input = new EditText(this);
         input.setText(oldName);
+        input.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_CORRECT | InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         new AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_rename_group_title)
                 .setMessage(getResources().getString(R.string.dialog_rename_group_message, oldName))
@@ -142,9 +145,9 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
                 //Rotate button
                 final View actionBar = groupRow.findViewById(R.id.group_row_action_bar);
                 final View showButton = groupRow.findViewById(R.id.group_row_show_edit_bar_button);
-                int angleChange = actionBar.getVisibility() == View.VISIBLE ? 360 : -360;
+                final int angleChange = actionBar.getVisibility() == View.VISIBLE ? -180 : 180;
                 final RotateAnimation animation = new RotateAnimation(0, angleChange, showButton.getMeasuredWidth() / 2, showButton.getMeasuredHeight() / 2);
-                animation.setDuration(400);
+                animation.setDuration(250);
                 animation.setAnimationListener(new Animation.AnimationListener() {
                     @Override public void onAnimationStart(Animation animation)  { /* NOP */  }
 
@@ -153,6 +156,7 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
                         //Toggle action bar visibility
                         actionBar.setVisibility(actionBar.getVisibility() == View.VISIBLE ?
                                 View.GONE : View.VISIBLE);
+                        showButton.setRotation(showButton.getRotation() + angleChange);
                     }
 
                     @Override public void onAnimationRepeat(Animation animation) { /* NOP */  }

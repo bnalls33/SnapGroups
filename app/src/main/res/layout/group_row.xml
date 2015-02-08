@@ -41,7 +41,7 @@
             android:scaleX="0.8"
             android:scaleY="0.8"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
     <LinearLayout
