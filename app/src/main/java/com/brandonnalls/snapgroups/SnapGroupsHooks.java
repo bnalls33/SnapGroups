@@ -3,6 +3,7 @@ package com.brandonnalls.snapgroups;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -55,6 +56,13 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
             findAndHookMethod("com.snapchat.android.LandingPageActivity", lpparam.classLoader, "onCreate", Bundle.class, new XC_MethodHook() {
                 protected void afterHookedMethod(MethodHookParam methodHookParam) throws Throwable {
                     sContextActivity = (Activity) methodHookParam.thisObject;
+                }
+            });
+
+
+            findAndHookMethod("com.snapchat.android.LandingPageActivity", lpparam.classLoader, "onResume", new XC_MethodHook() {
+                protected void afterHookedMethod(MethodHookParam methodHookParam) throws Throwable {
+                    detectAppConflicts();
                 }
             });
 
@@ -305,5 +313,33 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
         }
         Toast.makeText(sContextActivity, "SnapGroups thinks you have no friends :( Tell us it needs an update.", Toast.LENGTH_LONG).show();
         return new ArrayList();
+    }
+
+    /**
+     * SnapColors implemented their own version of SnapGroups after this was released.
+     * The problem with having both installed is that the ActionBar has button overlap and the
+     * SnapColors icon is really blurry on many devices.
+     *
+     * This warns the user, so they can use SnapColors for colors, and SnapGroups (you guessed it)
+     * for groups.
+     */
+    private void detectAppConflicts() {
+        PackageManager pm = sContextActivity.getPackageManager();
+        boolean snapColorsInstalled = true;
+        try {
+            //This throws an exception if its not installed
+            pm.getPackageInfo("com.manvir.SnapColors", PackageManager.GET_ACTIVITIES);
+
+            //This checks if groups is enabled.
+            SharedPreferences prefs = sContextActivity.createPackageContext("com.manvir.SnapColors", 0).getSharedPreferences("settings", Context.MODE_WORLD_READABLE);
+            if(!prefs.getBoolean("shouldGroups", false))
+                snapColorsInstalled = false;
+        } catch (Throwable t) {
+            snapColorsInstalled = false;
+        }
+
+        if(snapColorsInstalled) {
+            Toast.makeText(sContextActivity, "Conflict: Disable \"Groups\" in SnapColors Settings", Toast.LENGTH_LONG).show();
+        }
     }
 }
