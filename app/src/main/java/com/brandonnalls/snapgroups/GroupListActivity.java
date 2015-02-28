@@ -22,6 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -129,7 +130,6 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
                 .setPositiveButton(R.string.dialog_button_yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         mGroupManager.deleteGroup(groupName);
-
                     }
                 }).setNegativeButton(R.string.dialog_button_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -294,29 +294,33 @@ public class GroupListActivity extends ListActivity implements CacheChangedListe
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             final View row = super.getView(position, convertView, parent);
+            final String groupName = mCurrentGroupsForList.get(position);
+            final String groupNameWithCount = groupName + " (" + mGroupManager.getGroupUserCount(groupName) + ")";
+
+            //Change name string so it has the group size count
+            ((TextView)row.findViewById(R.id.group_row_name)).setText(groupNameWithCount);
 
             //Set button listeners
             row.findViewById(R.id.group_row_delete_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showDeleteGroupDialog(mCurrentGroupsForList.get(position));
+                    showDeleteGroupDialog(groupName);
                 }
             });
             row.findViewById(R.id.group_row_rename_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showRenameGroupDialog(mCurrentGroupsForList.get(position));
+                    showRenameGroupDialog(groupName);
                 }
             });
             row.findViewById(R.id.group_row_edit_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showEditGroupMembersDialog(mCurrentGroupsForList.get(position));
+                    showEditGroupMembersDialog(groupName);
                 }
             });
             row.findViewById(R.id.group_row_show_edit_bar_button).setOnClickListener(pencilClickListener(row));
 
-            final String groupName = mCurrentGroupsForList.get(position);
             final Drawable snapchatCBDrawable = ResourceServer.getSnapchatCheckboxDrawable(GroupListActivity.this);
             Boolean checkStatus = mGroupCheckedRecord.get(groupName);
             checkStatus = checkStatus == null ? false : checkStatus; //Maps can return null for Boolean

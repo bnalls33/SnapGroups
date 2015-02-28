@@ -83,20 +83,25 @@ public class GroupManager {
         }
     }
 
+    public void setGroupsUsers(String group, HashSet<String> usernames) {
+        if(usernames != null) {
+            mGroups.put(group, usernames);
+            saveCacheToDisk();
+            mListener.onCacheChange();
+        } else {
+            Log.e("SnapGroups", "Null set can't be set to groupList in setGroupUsers()");
+            XposedBridge.log("SnapGroups : Null set can't be set to groupList in setGroupUsers()");
+        }
+    }
+
     public ArrayList<String> getGroupNames() {
         ArrayList<String> names = new ArrayList<>(mGroups.keySet());
         Collections.sort(names);
         return names;
     }
 
-    public void setGroupsUsers(String group, HashSet<String> usernames) {
-        if(usernames != null) {
-            mGroups.put(group, usernames);
-            saveCacheToDisk();
-        } else {
-            Log.e("SnapGroups", "Null set can't be set to groupList in setGroupUsers()");
-            XposedBridge.log("SnapGroups : Null set can't be set to groupList in setGroupUsers()");
-        }
+    public int getGroupUserCount(String group) {
+        return mGroups.get(group).size();
     }
 
     public HashSet<String> getGroupsUsers(String groupName) {
