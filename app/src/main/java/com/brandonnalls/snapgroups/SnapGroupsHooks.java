@@ -102,7 +102,7 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
              * This will add a button, and link it to my GroupListActivity, sending the necessary
              * friend information.
              * */
-            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "k", new XC_MethodHook() {
+            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "l", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(final MethodHookParam param) throws Throwable {
                     if (sContextActivity == null) {
@@ -120,9 +120,9 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
                     }
 
                     try {
-                        //Otherbutton (Var b) is from R.java send_to_action_bar_search_button = 2131362400
-                        ///   reverse looked that # up in method SendToFragment "k" where it findsViewById(2131362400) via alias method.
-                        View otherButton = (View) getObjectField(param.thisObject, "b");
+                        //Otherbutton (Var b) is from R.java send_to_action_bar_search_button = 2131362420
+                        ///   reverse looked that # up in method SendToFragment "l" where it findsViewById(2131362420) via alias method.
+                        View otherButton = (View) getObjectField(param.thisObject, "c");
 
                         //Creates a container for SnapAll and SnapGroup XPosed mod buttons (if it doesn't exist already)
                         // and puts this snapGroup button into the container, next to "otherbutton" (preexisting snapchat button)
@@ -161,7 +161,7 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
             /**
              * These hide the SnapGroupButton while the search box is displayed
              */
-            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "q", new XC_MethodHook() {
+            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "s", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     View v = (View) getAdditionalInstanceField(param.thisObject, groupButtonContainerName);
@@ -169,7 +169,7 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
                 }
             });
 
-            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "r", new XC_MethodHook() {
+            findAndHookMethod("com.snapchat.android.fragments.sendto.SendToFragment", lpparam.classLoader, "t", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     View v = (View) getAdditionalInstanceField(param.thisObject, groupButtonContainerName);
@@ -186,8 +186,8 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
     public static void checkmarkSnapgroupUsers(HashSet<String> usernamesToCheck) {
         ArrayList friends = getFriendList();
 
-        //"l" is from SendtoFragment.. the two collections, one is a list, one set
-        Object hopefullyDestinationFriendSet = (Set) getObjectField(sContextSendToFragment, "l");
+        //"m" is from SendtoFragment.. the two collections, one is a list, one set
+        Object hopefullyDestinationFriendSet = (Set) getObjectField(sContextSendToFragment, "m");
         if(hopefullyDestinationFriendSet != null && hopefullyDestinationFriendSet instanceof LinkedHashSet) {
             LinkedHashSet destinationFriendSet = (LinkedHashSet) hopefullyDestinationFriendSet;
             try {
@@ -223,8 +223,6 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
             Log.e("SnapGroups","Couldn't find destination friend set");
             Toast.makeText(sContextActivity, "SnapGroups needs an update. It couldn't write to destination friend set.", Toast.LENGTH_LONG).show();
         }
-
-        //get destinationfriendset.. then filter & add... then call bluebottombarmethod
     }
 
     public static View.OnClickListener getSnapGroupButtonClickListener() {
@@ -280,13 +278,13 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
      * @return com.snapchat.android.model.Friend "Friend" ArrayList
      */
     public static ArrayList getFriendList() {
-        //SendToAdapter : var d is the only SendToAdpater in SendToFragment
-        Object hopefullyArrayAdapter =  getObjectField(sContextSendToFragment, "d");
+        //SendToAdapter : var e is the only SendToAdpater in SendToFragment
+        Object hopefullyArrayAdapter =  getObjectField(sContextSendToFragment, "e");
         if(hopefullyArrayAdapter != null && hopefullyArrayAdapter instanceof ArrayAdapter){
             ArrayAdapter aa = (ArrayAdapter) hopefullyArrayAdapter;
 
-            //ArrayList d or e from SendToAdapter, both seem to contain all the users...
-            Object hopefullyFriendAndStoryList = getObjectField(aa, "d");
+            //ArrayList c or h from SendToAdapter, both seem to contain all the users...
+            Object hopefullyFriendAndStoryList = getObjectField(aa, "c");
 
             if(hopefullyFriendAndStoryList != null && hopefullyFriendAndStoryList instanceof ArrayList) {
                 //Source list
