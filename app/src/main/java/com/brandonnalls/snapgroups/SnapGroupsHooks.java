@@ -330,7 +330,7 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
 
             //This checks if groups is enabled.
             SharedPreferences prefs = sContextActivity.createPackageContext("com.manvir.SnapColors", 0).getSharedPreferences("settings", Context.MODE_WORLD_READABLE);
-            if(!prefs.getBoolean("shouldGroups", false))
+            if(!prefs.getBoolean("shouldGroups", true))
                 snapColorsInstalled = false;
         } catch (Throwable t) {
             snapColorsInstalled = false;
