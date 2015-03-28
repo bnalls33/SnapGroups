@@ -11,7 +11,7 @@ of people without having to scroll through their hundreds of friends.
 ![alt tag](https://raw.github.com/bnalls33/SnapGroups/master/Screenshots/GroupList.png)
 
 # Requirements
-- Snapchat 9.3.1.0
+- Snapchat 9.4.2.0
 - Rooted Android Device
 - Xposed Framework Installed
 

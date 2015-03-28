@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,8 +12,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -120,8 +117,8 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
                     }
 
                     try {
-                        //Otherbutton (Var b) is from R.java send_to_action_bar_search_button = 2131362420
-                        ///   reverse looked that # up in method SendToFragment "l" where it findsViewById(2131362420) via alias method.
+                        //Otherbutton (Var b) is from R.java send_to_action_bar_search_button = 2131362434
+                        ///   reverse looked that # up in method SendToFragment "l" where it findsViewById(2131362434) via alias method.
                         View otherButton = (View) getObjectField(param.thisObject, "c");
 
                         //Creates a container for SnapAll and SnapGroup XPosed mod buttons (if it doesn't exist already)
@@ -187,7 +184,7 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
         ArrayList friends = getFriendList();
 
         //"m" is from SendtoFragment.. the two collections, one is a list, one set
-        Object hopefullyDestinationFriendSet = (Set) getObjectField(sContextSendToFragment, "m");
+        Object hopefullyDestinationFriendSet = (Set) getObjectField(sContextSendToFragment, "l");
         if(hopefullyDestinationFriendSet != null && hopefullyDestinationFriendSet instanceof LinkedHashSet) {
             LinkedHashSet destinationFriendSet = (LinkedHashSet) hopefullyDestinationFriendSet;
             try {
@@ -279,35 +276,40 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
      */
     public static ArrayList getFriendList() {
         //SendToAdapter : var e is the only SendToAdpater in SendToFragment
-        Object hopefullyArrayAdapter =  getObjectField(sContextSendToFragment, "e");
-        if(hopefullyArrayAdapter != null && hopefullyArrayAdapter instanceof ArrayAdapter){
-            ArrayAdapter aa = (ArrayAdapter) hopefullyArrayAdapter;
+        final Object hopefullySendToAdapter = getObjectField(sContextSendToFragment, "e");
+        final String adaptersType = getParameterTypes(new Object[]{hopefullySendToAdapter})[0].getCanonicalName();
+        final boolean isSendToAdapter = adaptersType.equals("com.snapchat.android.fragments.sendto.SendToAdapter");
 
-            //ArrayList c or h from SendToAdapter, both seem to contain all the users...
-            Object hopefullyFriendAndStoryList = getObjectField(aa, "c");
 
+        if (hopefullySendToAdapter != null && isSendToAdapter) {
+            Object sendToAdapter = hopefullySendToAdapter;
+
+            //ArrayList i or j from SendToAdapter, both seem to contain all the users...
+            Object hopefullyFriendAndStoryList = getObjectField(sendToAdapter, "i");
             if(hopefullyFriendAndStoryList != null && hopefullyFriendAndStoryList instanceof ArrayList) {
                 //Source list
                 ArrayList friendAndStoryList = (ArrayList) hopefullyFriendAndStoryList;
                 ArrayList friendList = new ArrayList(friendAndStoryList.size());
-                Class<?>[] types = getParameterTypes(friendAndStoryList.toArray());
-                for (int i = 0; i < types.length; i++) {
+                Class<?>[] friendAndStoryListTypes = getParameterTypes(friendAndStoryList.toArray());
+                for (int i = 0; i < friendAndStoryListTypes.length; i++) {
                     Object thingToAdd = friendAndStoryList.get(i);
-                    if (thingToAdd != null && types[i].getCanonicalName().equals("com.snapchat.android.model.Friend")) {
+                    if (thingToAdd != null && friendAndStoryListTypes[i].getCanonicalName().equals("com.snapchat.android.model.Friend")) {
                         friendList.add(thingToAdd);
-                    } else if (types[i].getCanonicalName().equals("com.snapchat.android.model.MyPostToStory")) {
+                    } else if (friendAndStoryListTypes[i].getCanonicalName().equals("com.snapchat.android.model.MyPostToStory")) {
                         //NOOP
                     } else {
-                        XposedBridge.log("SnappGroups: Found unknown type: " + types[i].toString());
+                        XposedBridge.log("SnappGroups: Found unknown type: " + friendAndStoryListTypes[i].toString());
                     }
                 }
                 return friendList;
             } else {
                 XposedBridge.log("SnapGroups couldn't find Friend List.");
+                Log.e("SnapGroups", "Didn't find RecyclerView.Adapter, found: "+adaptersType);
             }
 
         } else {
-            XposedBridge.log("SnapGroups couldn't find ArrayAdapter");
+            XposedBridge.log("SnapGroups couldn't find RecyclerAdapter. Type: "+adaptersType);
+            Log.e("SnapGroups", "Didn't find RecyclerView.Adapter, found: "+adaptersType);
         }
         Toast.makeText(sContextActivity, "SnapGroups thinks you have no friends :( Tell us it needs an update.", Toast.LENGTH_LONG).show();
         return new ArrayList();
