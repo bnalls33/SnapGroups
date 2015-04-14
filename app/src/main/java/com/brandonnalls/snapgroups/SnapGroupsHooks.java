@@ -205,11 +205,11 @@ public class SnapGroupsHooks implements IXposedHookLoadPackage {
                     }
                 }
 
-                // This method "b" in SendToFragment that makes the bottom Blue SentToBar contain
+                // This method "c" in SendToFragment that makes the bottom Blue SentToBar contain
                 // a comma separated list of friend display names.
                 // It has iterators (localInterator1) and such.
                 if(changedMade) {
-                    callMethod(sContextSendToFragment, "b");
+                    callMethod(sContextSendToFragment, "c");
                 }
             } catch(Exception e) {
                 XposedBridge.log("SnapGroups : Failed to add SnapGroups to Friend List. Exception: "+e.getStackTrace());
